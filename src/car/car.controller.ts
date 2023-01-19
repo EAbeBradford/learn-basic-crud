@@ -1,5 +1,6 @@
-import { Controller, Get ,Post,Body, Delete, Put } from '@nestjs/common';
-import { CarService} from './car.service'
+import { Controller, Get, Query, Post, Param, Body, Delete, Put } from '@nestjs/common';
+import { CarService} from './car.service';
+import { CarDto } from './car.dto';
 
 @Controller('car')
 export class CarController {
@@ -7,28 +8,29 @@ export class CarController {
     {}
 
     @Get()
-    async getCars(){
+    public getCars(){
         return this.carService.getCars();
     }
 
-    @Get('/id')
-    async getCarsById(){
-        return this.carService.getCarById();
+    @Get(':id')
+    public getCarsById(@Param('id') id: number){
+        return this.carService.getCarById(id);
     }
 
     @Post()
-    async postCar(@Body car:){
-        return this.carService.postCarById();
+    public postCar(@Body() car:CarDto){
+        return this.carService.postCar(car);
     }
 
     @Delete()
-    async deleteCarById(){
-        return this.carService.deleteCarById();
+    public deleteCarById(@Param('id') id: number){
+        this.carService.deleteCarById(id);
     }
 
     @Put()
-    async putCarById(){
-        return this.carService.putCarById();
+    public putCarById(@Param('id') id: number, @Query() query){
+        const propertyName = query.property_name;
+        const propertyValue = query.property_value;
+        return this.carService.putCarById(id, propertyName, propertyValue);
     }
-
 }
