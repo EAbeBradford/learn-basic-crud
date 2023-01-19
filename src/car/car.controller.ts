@@ -8,27 +8,33 @@ export class CarController {
     {}
 
     @Get()
-    public getCars(){
+    public async getCars(){
         return this.carService.getCars();
     }
 
     @Get(':id')
-    public getCarsById(@Param('id') id: number){
-        return this.carService.getCarById(id);
+    public async asyncgetCarsById(@Param('id') id: number){
+        const result  = await this.carService.getCarById(id);
+        // try {
+        //     return result;
+        // } catch(exeption e){
+        //     console.log("error getting by id");
+        // }
+        return result;
     }
 
     @Post()
-    public postCar(@Body() car:CarDto){
+    public  postCar(@Body() car:CarDto){
         return this.carService.postCar(car);
     }
 
-    @Delete()
-    public deleteCarById(@Param('id') id: number){
+    @Delete(':id')
+    public async deleteCarById(@Param('id') id: number){
         this.carService.deleteCarById(id);
     }
 
-    @Put()
-    public putCarById(@Param('id') id: number, @Query() query){
+    @Put(':id')
+    public async putCarById(@Param('id') id: number, @Query() query){
         const propertyName = query.property_name;
         const propertyValue = query.property_value;
         return this.carService.putCarById(id, propertyName, propertyValue);
